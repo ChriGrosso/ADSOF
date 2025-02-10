@@ -1,0 +1,30 @@
+3.1
+	Non succede nulla, lascia inserire i doppioni tranquillamente
+3.2
+	C:\Users\Chris\GIT\ADSOF\P1>javac CarteleraCine.java
+	CarteleraCine.java:19: error: cannot find symbol
+	          new Pelicula("Jumanji",NULL, 1995),
+                                 ^
+	  symbol:   variable NULL
+ 	 location: class CarteleraCine
+	CarteleraCine.java:20: error: constructor Pelicula in class Pelicula cannot be applied to given types;
+	          new Pelicula("Jumanji","Aventura", "Drama", 1995)
+	          ^
+ 	 required: String,String,int
+ 	 found:    String,String,String,int
+ 	 reason: actual and formal argument lists differ in length
+	 2 errors
+
+3.3
+Con array vuoto esegue senza aggiungere nulla 
+	C:\Users\Chris\GIT\ADSOF\P1>java CarteleraCine
+	Cine: Telmo
+	Peliculas en cartelera: []
+
+Con null errore Runtime
+	C:\Users\Chris\GIT\ADSOF\P1>java CarteleraCine
+	Exception in thread "main" java.lang.NullPointerException: Cannot read the array length because "<local3>" is null
+	        at CarteleraCine.<init>(CarteleraCine.java:7)
+        	at CarteleraCine.main(CarteleraCine.java:20)
+
+ ¿Cómo puedes mejorar el código para que ese problema no suceda? Facendo uno straccio di controllo sui datiù
