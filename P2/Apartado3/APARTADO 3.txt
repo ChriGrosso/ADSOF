@@ -1,0 +1,17 @@
+PRACTICA 2 APARTADO 3 
+
+Problemas: 
+1) Las clases Coche y Furgoneta tienen atributos en comun. Se debe crear una nueva superclase Vehiculo.
+2) Para rapresentar lo estado de una averia se debe utilizar una enumeracion porque el uso de String es ineficaz e incoveniente. 
+3) El metodo para obtener averias toma como parametros la matricula y el estado como string. Sarìa mas claro si fuera un metodo en la clase TallerMecanico que devolviera una lista de averias filtradas por estado.
+4) cochesDeMarca y furgonetasDeMarca podrian combinarse en un metodo vehiculosDeMarca(marca: String) dentro de TallerMecanico, explotando la nueva superclase Vehiculo. 
+5) El cliente debe tener una lista de sus vehículos.
+
+Cambios:
+1) Se crea la superclase Vehículo, con los atributos comunes entre Coche y Furgoneta, que son: marca, modelo, color, matricula 
+2) Creacion de una enumeración EstadoAveria para representar el estado de la averia.
+3) Creacion del metoo buscarAveriasPorEstado(estado: EstadoAveria) para obtener las averias de un determinado estado. 
+4) Creacion del metodo vehiculosDeMarca(marca: String).
+5) Se añade una lista de vehículos a la clase de cliente. 
+
+El diagrama UML representa una aplicación para la gestión de un taller mecánico, denominada TallerMecanico. La clase TallerMecanico representa al taller, que tiene un nombre como atributo y proporciona dos métodos: vehiculosDeMarca, para obtener todos los vehículos de una marca concreta, y averias para recuperar todas las averías que se encuentran en un estado concreto. El taller tiene una relación de agregación con los vehículos, lo que significa que puede repararlos, pero no es su propietario. Los vehículos se modelan mediante la clase abstracta Vehículo, que incluye atributos comunes como marca, modelo, color y matrícula. De esta clase derivan dos subclases: Coche, que añade el atributo últimaITV para la fecha de la última revisión, y Furgoneta, que introduce el atributo cargataMáxima para especificar la capacidad de carga de la furgoneta. Cada vehículo tiene un propietario, representado por la clase Cliente, que incluye el nombre y el dni. La relación entre Cliente y Vehículo es de uno a muchos, ya que un cliente puede ser propietario de varios vehículos, pero cada vehículo pertenece a un solo cliente. Para gestionar las reparaciones, el sistema utiliza la clase Avería, que representa una avería y contiene información como la descripción , la fechaInicio , la fechaFin  y el estado. El estado de la avería se define ahora mediante una enumeración EstadoAvería, que sólo permite seleccionar valores válidos: EN_ESPERA , REVISADO, EN_PROCESO, FINALIZADO y ENTREGADO.
