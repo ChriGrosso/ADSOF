@@ -24,7 +24,7 @@ public class BranchTester {
                 new AddChange(0, "/src/pkg1/Decorator.java", "lastLine"),
                 new ModifyChange(10, 10, "/src/pkg1/Decorator.java", "modified line")
         );
-        ChangeCommit commit2 = new ChangeCommit("Author", "Decorator interface", changes2); // Crea un nuevo commit con los cambios
+        ChangeCommit commit2 = new ChangeCommit("John Doe", "Decorator interface", changes2); // Crea un nuevo commit con los cambios
 
         commit.MergeCommit commit3 = new commit.MergeCommit("Author", "Merging previous commits", List.of(commit1, commit2)); // Crea un MergeCommit que combina los dos commits anteriores
 

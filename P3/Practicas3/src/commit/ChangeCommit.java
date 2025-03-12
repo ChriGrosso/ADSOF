@@ -11,14 +11,14 @@ import code.Change;
 import code.RemoveChange;
 
 public class ChangeCommit {
-    protected String commitId; // Identificador único del commit
-    protected String author; // Autor del commit
-    protected LocalDateTime date; // Fecha y hora del commit
-    protected String description; // Descripción del commit
+    private String commitId; // Identificador único del commit
+    private String author; // Autor del commit
+    private LocalDateTime date; // Fecha y hora del commit
+    private String description; // Descripción del commit
     private List<Change> changes; // Lista de cambios incluidos en el commit
     private static int commitCounter = 1; // Contador para generar identificadores únicos
-    protected static String defaultDescription = "no comment"; // Descripción por defecto para los commits
-    protected static String defaultAuthor = "John Doe"; // Autor por defecto para los commits
+    private static String defaultDescription = "no comment"; // Descripción por defecto para los commits
+    private static String defaultAuthor = "John Doe"; // Autor por defecto para los commits
 
     // Constructor: Crea un nuevo commit.
     // Recibe el autor, la descripción y la lista de cambios.
@@ -33,29 +33,29 @@ public class ChangeCommit {
     // Constructor: Crea un nuevo commit con la lista de cambios.
     // Utiliza el autor y la descripción por defecto.
     public ChangeCommit(List<Change> changes){
-        this(defaultAuthor, defaultDescription, changes);
+        this(getDefaultAuthor(), getDefaultDescription(), changes);
     }
 
     // Constructor: Crea un nuevo commit con el autor y la lista de cambios.
     // Utiliza la descripción por defecto.
     public ChangeCommit(String author, List<Change> changes){
-        this(author, defaultDescription, changes);
+        this(author, getDefaultDescription(), changes);
     }
 
     // Constructor: Crea un nuevo commit sin parámetros.
     // Utiliza el autor y la descripción por defecto y una lista de cambios vacía.
     public ChangeCommit(){
-        this(defaultAuthor, defaultDescription, new ArrayList<Change>());
+        this(getDefaultAuthor(), getDefaultDescription(), new ArrayList<Change>());
     }
 
     // Calcula el número total de líneas modificadas en el commit.
     public int getTotalLinesChanged() {
         int total = 0;
-        for (Change change : changes) {
-            if (change instanceof AddChange) { // Si el cambio es de tipo AddChange
-                total += ((AddChange) change).getNumberOfLines(); // Suma el número de líneas añadidas
-            } else if (change instanceof RemoveChange) { // Si el cambio es de tipo RemoveChange
-                total -= ((RemoveChange) change).getNumberOfLines(); // Resta el número de líneas eliminadas
+        for (Change c : changes) {
+            if (c instanceof AddChange) { // Si el cambio es de tipo AddChange
+                total += ((AddChange) c).getNumberOfLines(); // Suma el número de líneas añadidas
+            } else if (c instanceof RemoveChange) { // Si el cambio es de tipo RemoveChange
+                total -= ((RemoveChange) c).getNumberOfLines(); // Resta el número de líneas eliminadas
             }
         }
         return total;
@@ -111,6 +111,34 @@ public class ChangeCommit {
         } else if (change instanceof RemoveChange) { // Si el cambio es de tipo RemoveChange
             lineChange = " (-" + ((RemoveChange) change).getNumberOfLines() + ")"; // Agrega la diferencia negativa
         }
-        return change.type + " : " + change.filePath + lineChange; // Devuelve la información del cambio formateada
+        return change.getType() + " : " + change.getFilePath() + lineChange; // Devuelve la información del cambio formateada
     }
+
+	/**
+	 * @return the defaultAuthor
+	 */
+	public static String getDefaultAuthor() {
+		return defaultAuthor;
+	}
+
+	/**
+	 * @param defaultAuthor the defaultAuthor to set
+	 */
+	public static void setDefaultAuthor(String defaultAuthor) {
+		ChangeCommit.defaultAuthor = defaultAuthor;
+	}
+
+	/**
+	 * @return the defaultDescription
+	 */
+	public static String getDefaultDescription() {
+		return defaultDescription;
+	}
+
+	/**
+	 * @param defaultDescription the defaultDescription to set
+	 */
+	public static void setDefaultDescription(String defaultDescription) {
+		ChangeCommit.defaultDescription = defaultDescription;
+	}
 }

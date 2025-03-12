@@ -16,13 +16,13 @@ public class RemoveChange extends Change {
     // Devuelve una representación en cadena del objeto RemoveChange, incluyendo la línea final.
     @Override
     public String toString() {
-        return super.toString() + ", end line=" + endLine + "}";
+        return super.toString() + ",\n\tend line=" + endLine + "\n}";
     }
 
     // Sobreescribe el método getNumberOfLines() de la superclase Change.
     // Devuelve el número de líneas eliminadas.
     @Override
     public int getNumberOfLines() {
-        return endLine - startLine + 1; // Calcula el número de líneas eliminadas
+        return endLine - getStartLine() + 1; // Calcula el número de líneas eliminadas
     }
 }

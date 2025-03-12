@@ -18,7 +18,7 @@ public class ModifyChange extends Change {
     // Devuelve una representación en cadena del objeto ModifyChange, incluyendo el nuevo contenido, el número de líneas y la línea final.
     @Override
     public String toString() {
-        return super.toString() + ", content='" + content.replace("\n", "\\n") + "', number of lines=" + numberOfLines + ", end line=" + endLine + "}";
+        return super.toString() + ",\n\tcontent='" + content.replace("\n", "\\n") + "',\n\tnumber of lines=" + numberOfLines + ",\n\tend line=" + endLine + "\n}";
     }
 
     // Sobreescribe el método getNumberOfLines() de la superclase Change.

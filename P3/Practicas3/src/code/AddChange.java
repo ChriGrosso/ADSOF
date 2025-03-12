@@ -16,7 +16,7 @@ public class AddChange extends Change {
     // Devuelve una representación en cadena del objeto AddChange, incluyendo el contenido y el número de líneas.
     @Override
     public String toString() {
-        return super.toString() + ", content='" + content.replace("\n", "\\n") + "', number of lines=" + numberOfLines + "}";
+        return super.toString() + ",\n\tcontent='" + content.replace("\n", "\n\t") + "',\n\tnumber of lines=" + numberOfLines + "\n}";
     }
 
     // Sobreescribe el método getNumberOfLines() de la superclase Change.

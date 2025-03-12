@@ -22,7 +22,7 @@ public class MergeCommit extends ChangeCommit {
     // Constructor: Crea un nuevo commit de mezcla con la lista de commits fusionados.
     // Utiliza el autor y la descripción por defecto.
     public MergeCommit(List<ChangeCommit> mergedCommits){
-        this(defaultAuthor, defaultDescription, mergedCommits);
+        this(getDefaultAuthor(), getDefaultDescription(), mergedCommits);
     }
 
     // Sobreescribe el método getTotalLinesChanged() de la superclase ChangeCommit.
@@ -53,13 +53,13 @@ public class MergeCommit extends ChangeCommit {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Formateador para la fecha
         StringBuilder sb = new StringBuilder();
-        sb.append("commit ").append(commitId).append("\n"); // Agrega el identificador del commit
-        sb.append("Author: ").append(author).append("\n"); // Agrega el autor del commit
-        sb.append("Date: ").append(date.format(formatter)).append("\n"); // Agrega la fecha del commit formateada
-        sb.append("Description: ").append(description).append("\n"); // Agrega la descripción del commit
+        sb.append("commit ").append(getCommitId()).append("\n"); // Agrega el identificador del commit
+        sb.append("Author: ").append(getAuthor()).append("\n"); // Agrega el autor del commit
+        sb.append("Date: ").append(getDate().format(formatter)).append("\n"); // Agrega la fecha del commit formateada
+        sb.append("Description: ").append(getDescription()).append("\n"); // Agrega la descripción del commit
         sb.append("Merged commits:").append("\n"); // Agrega el encabezado para los commits fusionados
         for (ChangeCommit commit : mergedCommits) {
-            sb.append(commit.commitId).append(" on ").append(commit.date.format(formatter)).append("\n"); // Agrega la información de cada commit fusionado
+            sb.append(commit.getCommitId()).append(" on ").append(commit.getDate().format(formatter)).append("\n"); // Agrega la información de cada commit fusionado
         }
         return sb.toString();
     }
