@@ -48,4 +48,8 @@ public class Branch {
         }
         return sb.toString(); // Devuelve la cadena de salida formateada
     }
+
+	public String getName() {
+		return name;
+	}
 }
