@@ -1,15 +1,18 @@
 package tester;
 
 import java.util.List;
-
-import code.AddChange;
-import code.Change;
-import code.ModifyChange;
-import code.RemoveChange;
+import change.*;
 import commit.ChangeCommit;
 import commit.MergeCommit;
 import repository.Repository;
 
+/**
+ * Clase RepositoryTester.
+ * Clase de prueba para la funcionalidad de la clase Repository.
+ *
+ * @author Christian Grosso, Marco Paparella
+ * @version 1.0
+ */
 public class RepositoryTester {
     public static void main(String[] args) {
         List<String> authorizedUsers = List.of("John Doe");

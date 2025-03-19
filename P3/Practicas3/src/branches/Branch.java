@@ -4,33 +4,63 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import code.AddChange;
-import code.Change;
-import code.RemoveChange;
 import commit.ChangeCommit;
 
+/**
+ * Clase Branch.
+ * Representa una rama en un sistema de control de versiones.
+ *
+ * @author Christian Grosso, Marco Paparella
+ * @version 1.0
+ */
 public class Branch {
     private String name; // Nombre de la rama
     private List<ChangeCommit> commits; // Lista de commits que contiene la rama
 
+    /**
+     * Constructor de la clase Branch.
+     *
+     * @param name Nombre de la rama.
+     */
     public Branch(String name) {
         this.name = name; // Asigna el nombre a la rama
         this.commits = new ArrayList<>(); // Inicializa la lista de commits como vacía
     }
 
+    /**
+     * Constructor que crea una nueva rama basada en una rama existente.
+     *
+     * @param name Nombre de la nueva rama.
+     * @param sourceBranch Rama fuente de la que se copiarán los commits.
+     */
     public Branch(String name, Branch sourceBranch) {
         this.name = name; // Asigna el nombre a la nueva rama
         this.commits = new ArrayList<>(sourceBranch.getCommits()); // Copia los commits de la rama fuente a la nueva rama
     }
 
+    /**
+     * Agrega un commit a la rama.
+     *
+     * @param commit Objeto ChangeCommit que representa un cambio en la rama.
+     */
     public void addCommit(ChangeCommit commit) {
         commits.add(commit); // Agrega un commit a la lista de commits de la rama
     }
 
+    /**
+     * Obtiene la lista de commits de la rama.
+     *
+     * @return Lista de objetos ChangeCommit.
+     */
     public List<ChangeCommit> getCommits() {
         return commits; // Devuelve la lista de commits de la rama
     }
 
+    /**
+     * Devuelve una representación en cadena de la rama.
+     *
+     * @return Representación de la rama en formato de texto.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -49,7 +79,12 @@ public class Branch {
         return sb.toString(); // Devuelve la cadena de salida formateada
     }
 
-	public String getName() {
-		return name;
-	}
+    /**
+     * Obtiene el nombre de la rama.
+     *
+     * @return Nombre de la rama.
+     */
+    public String getName() {
+        return name;
+    }
 }

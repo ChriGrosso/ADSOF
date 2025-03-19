@@ -1,119 +1,178 @@
 package repository;
 
-import java.util.ArrayList;
+import branches.Branch;
+import commit.ChangeCommit;
+import commit.MergeCommit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import branches.Branch;
-import commit.ChangeCommit;
-import commit.MergeCommit;
-
+/**
+ * Clase Repository.
+ * Representa un repositorio en un sistema de control de versiones.
+ *
+ * @author Christian Grosso, Marco Paparella
+ * @version 1.0
+ */
 public class Repository {
     private String name; // Nombre del repositorio
-    private Map<String, Branch> branches; // Mapa de ramas del repositorio
+    private Map<String, Branch> branches; // Mapa de ramas en el repositorio
     private Branch activeBranch; // Rama activa del repositorio
-    private List<String> authorizedUsers; // Lista de usuarios autorizados para hacer commits
 
-    // Constructor: Crea un nuevo repositorio.
+    /**
+     * Constructor de la clase Repository.
+     *
+     * @param name Nombre del repositorio.
+     * @param authorizedUsers Lista de usuarios autorizados (no utilizada en esta implementación).
+     */
     public Repository(String name, List<String> authorizedUsers) {
-        this.name = name; // Asigna el nombre al repositorio
-        this.branches = new HashMap<>(); // Inicializa el mapa de ramas
-        this.authorizedUsers = authorizedUsers; // Asigna la lista de usuarios autorizados
-        createMainBranch(); // Crea la rama principal "main"
+        this.name = name;
+        this.branches = new HashMap<>();
+        this.activeBranch = null;
+
+        // Creación automática de la rama principal
+        addBranch("main");
+        setActiveBranch("main");
     }
 
-    // Método privado: Crea la rama principal "main".
-    private void createMainBranch() {
-        Branch mainBranch = new Branch("main"); // Crea una nueva rama llamada "main"
-        branches.put("main", mainBranch); // Agrega la rama al mapa de ramas
-        activeBranch = mainBranch; // Establece la rama "main" como la rama activa
+    /**
+     * Agrega una rama al repositorio.
+     *
+     * @param branch Objeto Branch que representa la rama a agregar.
+     */
+    public void addBranch(Branch branch) {
+        branches.put(branch.getName(), branch);
+        if (activeBranch == null) {
+            activeBranch = branch;
+        }
     }
 
-    // Método: Agrega una nueva rama al repositorio.
+    /**
+     * Crea y agrega una nueva rama al repositorio.
+     *
+     * @param branchName Nombre de la nueva rama.
+     */
     public void addBranch(String branchName) {
-        Branch newBranch = new Branch(branchName, activeBranch); // Crea una nueva rama a partir de la rama activa
-        branches.put(branchName, newBranch); // Agrega la nueva rama al mapa de ramas
+        if (!branches.containsKey(branchName)) {
+            Branch newBranch = new Branch(branchName);
+            branches.put(branchName, newBranch);
+            if (activeBranch == null) {
+                activeBranch = newBranch;
+            }
+        } else {
+            System.out.println("Branch ya existente: " + branchName);
+        }
     }
 
-    // Método: Establece la rama activa del repositorio.
+    /**
+     * Establece la rama activa en el repositorio.
+     *
+     * @param branchName Nombre de la rama a activar.
+     */
     public void setActiveBranch(String branchName) {
-        if (branches.containsKey(branchName)) { // Verifica si la rama existe
-            activeBranch = branches.get(branchName); // Establece la rama como la rama activa
+        if (branches.containsKey(branchName)) {
+            this.activeBranch = branches.get(branchName);
+        } else {
+            System.out.println("Branch no existente: " + branchName);
         }
     }
 
-    // Método: Agrega un commit a la rama activa.
-    public void addCommit(ChangeCommit commit) {
-        if (authorizedUsers.contains(commit.getAuthor())) { // Verifica si el usuario está autorizado
-            activeBranch.addCommit(commit); // Agrega el commit a la rama activa
+    /**
+     * Establece la rama activa utilizando un objeto Branch.
+     *
+     * @param branch Objeto Branch a activar.
+     */
+    public void setActiveBranch(Branch branch) {
+        if (branch != null && branches.containsKey(branch.getName())) {
+            this.activeBranch = branch;
+        } else {
+            System.out.println("Branch no existente: " + (branch != null ? branch.getName() : "null"));
         }
     }
-    
-    public void mergeBranches(String originBranchName, String destinationBranchName) {
-        Branch originBranch = branches.get(originBranchName);
-        Branch destinationBranch = branches.get(destinationBranchName);
 
-        if (originBranch == null || destinationBranch == null) {
-            return;
-        }
-
-        ChangeCommit lastCommonCommit = findLastCommonCommit(originBranch, destinationBranch);
-
-        if (lastCommonCommit == null) {
-            return;
-        }
-
-        List<ChangeCommit> originCommitsToMerge = getCommitsAfter(originBranch, lastCommonCommit);
-
-        mergeCommits(destinationBranch, originCommitsToMerge, originBranchName, destinationBranchName);
+    /**
+     * Obtiene una rama específica del repositorio.
+     *
+     * @param name Nombre de la rama.
+     * @return Objeto Branch correspondiente al nombre especificado.
+     */
+    public Branch getBranch(String name) {
+        return branches.get(name);
     }
 
-    private ChangeCommit findLastCommonCommit(Branch originBranch, Branch destinationBranch) {
-        List<ChangeCommit> originCommits = originBranch.getCommits();
-        List<ChangeCommit> destinationCommits = destinationBranch.getCommits();
+    /**
+     * Imprime la lista de ramas en el repositorio.
+     */
+    public void printBranches() {
+        System.out.println("Repositorio: " + name);
+        System.out.println("Branches:");
+        for (String branchName : branches.keySet()) {
+            String activeMarker = (activeBranch != null && activeBranch.getName().equals(branchName)) ? " (active)" : "";
+            System.out.println("- " + branchName + activeMarker);
+        }
 
-        for (int i = originCommits.size() - 1; i >= 0; i--) {
-            ChangeCommit originCommit = originCommits.get(i);
-            for (int j = destinationCommits.size() - 1; j >= 0; j--) {
-                ChangeCommit destinationCommit = destinationCommits.get(j);
-                if (originCommit.getCommitId().equals(destinationCommit.getCommitId())) {
-                    return originCommit;
+        for (Branch branch : branches.values()) {
+            System.out.println("Branch: " + branch.getName() + (branch.equals(activeBranch) ? " (active)" : ""));
+            List<ChangeCommit> commits = branch.getCommits();
+            if (commits.isEmpty()) {
+                System.out.println("(Ningún commit presente)");
+            } else {
+                for (ChangeCommit commit : commits) {
+                    System.out.println(commit.getCommitId() + " - " + commit.getDescription());
                 }
             }
         }
-        return null;
     }
 
-    private List<ChangeCommit> getCommitsAfter(Branch branch, ChangeCommit commit) {
-        List<ChangeCommit> commits = branch.getCommits();
-        int index = commits.indexOf(commit);
-        if (index == -1 || index == commits.size() - 1) {
-            return new ArrayList<>();
+    /**
+     * Agrega un commit a la rama activa.
+     *
+     * @param commit Objeto ChangeCommit a agregar.
+     */
+    public void addCommit(ChangeCommit commit) {
+        if (activeBranch != null) {
+            activeBranch.addCommit(commit);
+        } else {
+            System.out.println("Ninguna rama activa. No se puede agregar el commit.");
         }
-        return commits.subList(index + 1, commits.size());
     }
 
-    private void mergeCommits(Branch destinationBranch, List<ChangeCommit> commits, String originBranchName, String destinationBranchName) {
-        MergeCommit mergeCommit = new MergeCommit("John Doe", "Merge branches " + originBranchName + " and " + destinationBranchName, commits);
-        destinationBranch.addCommit(mergeCommit);
-    }
+    /**
+     * Fusiona dos ramas dentro del repositorio.
+     *
+     * @param sourceBranch Nombre de la rama de origen.
+     * @param targetBranch Nombre de la rama de destino.
+     */
+    public void mergeBranches(String sourceBranch, String targetBranch) {
+        if (!branches.containsKey(sourceBranch) || !branches.containsKey(targetBranch)) {
+            System.out.println("Una de las ramas especificadas no existe.");
+            return;
+        }
 
-    // Sobreescribe el método toString() para imprimir la información del repositorio.
+        Branch source = branches.get(sourceBranch);
+        Branch target = branches.get(targetBranch);
+        List<ChangeCommit> sourceCommits = source.getCommits();
+
+        MergeCommit mergeCommit = new MergeCommit("System", "Merge branches " + sourceBranch + " into " + targetBranch, sourceCommits, new java.util.ArrayList<>());
+        target.addCommit(mergeCommit);
+
+        setActiveBranch(target);
+        System.out.println("Merge completado entre " + sourceBranch + " y " + targetBranch);
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Repository: ").append(name).append("\n"); // Agrega el nombre del repositorio
-        sb.append("Branches:\n"); // Agrega el encabezado de las ramas
+        sb.append("Repository: ").append(name).append("\\n");
+        sb.append("Active Branch: ").append(activeBranch != null ? activeBranch.getName() : "None").append("\\n");
+        sb.append("Branches: \\n");
         for (String branchName : branches.keySet()) {
-            sb.append("- ").append(branchName); // Agrega el nombre de la rama
-            if (branches.get(branchName) == activeBranch) {
-                sb.append(" (active)"); // Indica si la rama está activa
+            sb.append("- ").append(branchName);
+            if (activeBranch != null && activeBranch.getName().equals(branchName)) {
+                sb.append(" (active)");
             }
-            sb.append("\n");
+            sb.append("\\n");
         }
-        sb.append("Branch: ").append(activeBranch.getName()).append("\n"); // Agrega el nombre de la rama activa
-        sb.append(activeBranch.toString()); // Agrega la información de la rama activa
         return sb.toString();
     }
 }
