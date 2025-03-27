@@ -5,11 +5,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import change.AddChange;
+import change.Change;
+import change.RemoveChange;
 
-import code.AddChange;
-import code.Change;
-import code.RemoveChange;
-
+/**
+ * Clase ChangeCommit.
+ * Representa un commit de cambios en un sistema de control de versiones.
+ *
+ * @author Christian Grosso, Marco Paparella
+ * @version 1.0
+ */
 public class ChangeCommit {
     private String commitId; // Identificador único del commit
     private String author; // Autor del commit
@@ -17,25 +23,29 @@ public class ChangeCommit {
     private String description; // Descripción del commit
     private List<Change> changes; // Lista de cambios incluidos en el commit
     private static int commitCounter = 1; // Contador para generar identificadores únicos
-    private static String defaultDescription = "no comment"; // Descripción por defecto para los commits
-    private static String defaultAuthor = "John Doe"; // Autor por defecto para los commits
+    private static String defaultDescription = "no comment"; // Descripción por defecto
+    private static String defaultAuthor = "John Doe"; // Autor por defecto
 
-    // Constructor: Crea un nuevo commit.
-    // Recibe el autor, la descripción y la lista de cambios.
+    /**
+     * Constructor de la clase ChangeCommit.
+     *
+     * @param author Autor del commit.
+     * @param description Descripción del commit.
+     * @param changes Lista de cambios incluidos en el commit.
+     */
     public ChangeCommit(String author, String description, List<Change> changes) {
-        this.commitId = String.format("%05d", commitCounter++) + UUID.randomUUID().toString().replace("-", "").substring(0, 15); // Genera un identificador único
-        this.author = author; // Asigna el autor
-        this.date = LocalDateTime.now(); // Asigna la fecha y hora actual
-        this.description = description; // Asigna la descripción
-        this.changes = changes; // Asigna la lista de cambios
+        this.commitId = String.format("%05d", commitCounter++) + UUID.randomUUID().toString().replace("-", "").substring(0, 15);
+        this.author = author;
+        this.date = LocalDateTime.now();
+        this.description = description;
+        this.changes = changes;
     }
 
-    // Constructor: Crea un nuevo commit con la lista de cambios.
-    // Utiliza el autor y la descripción por defecto.
-    public ChangeCommit(List<Change> changes){
-        this(getDefaultAuthor(), getDefaultDescription(), changes);
-    }
+    public ChangeCommit(List<Change> changes) { this(getDefaultAuthor(), getDefaultDescription(), changes); }
+    public ChangeCommit(String author, List<Change> changes) { this(author, getDefaultDescription(), changes); }
+    public ChangeCommit() { this(getDefaultAuthor(), getDefaultDescription(), new ArrayList<Change>()); }
 
+<<<<<<< HEAD
     // Constructor: Crea un nuevo commit con el autor y la lista de cambios.
     // Utiliza la descripción por defecto.
     
@@ -50,96 +60,53 @@ public class ChangeCommit {
     }
 
     // Calcula el número total de líneas modificadas en el commit.
+=======
+    /**
+     * Calcula el número total de líneas modificadas en el commit.
+     *
+     * @return Número total de líneas cambiadas.
+     */
+>>>>>>> 7cc839b223729c3b7110e91b50b92fa679e67792
     public int getTotalLinesChanged() {
         int total = 0;
         for (Change c : changes) {
-            if (c instanceof AddChange) { // Si el cambio es de tipo AddChange
-                total += ((AddChange) c).getNumberOfLines(); // Suma el número de líneas añadidas
-            } else if (c instanceof RemoveChange) { // Si el cambio es de tipo RemoveChange
-                total -= ((RemoveChange) c).getNumberOfLines(); // Resta el número de líneas eliminadas
-            }
+            if (c instanceof AddChange) { total += ((AddChange) c).getNumberOfLines(); }
+            else if (c instanceof RemoveChange) { total -= ((RemoveChange) c).getNumberOfLines(); }
         }
         return total;
     }
 
-    // Devuelve la lista de cambios del commit.
-    public List<Change> getChanges() {
-        return changes;
-    }
+    public List<Change> getChanges() { return changes; }
+    public String getAuthor() { return author; }
+    public String getCommitId() { return commitId; }
+    public String getDescription() { return description; }
+    public LocalDateTime getDate() { return date; }
+    public void setCommitId(String commitId) { this.commitId = commitId; }
+    public void setAuthor(String author) { this.author = author; }
+    public void setDate(LocalDateTime date) { this.date = date; }
+    public void setDescription(String description) { this.description = description; }
 
-    // Devuelve el autor del commit.
-    public String getAuthor() {
-        return author;
-    }
-
-    // Devuelve el identificador único del commit.
-    public String getCommitId() {
-        return commitId;
-    }
-
-    // Devuelve la descripción del commit.
-    public String getDescription() {
-        return description;
-    }
-
-    // Devuelve la fecha y hora del commit.
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    // Sobreescribe el método toString() de la clase Object.
-    // Devuelve una representación en cadena del objeto ChangeCommit, incluyendo el identificador, el autor, la fecha, la descripción y los cambios.
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // Formateador para la fecha
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         StringBuilder sb = new StringBuilder();
-        sb.append("commit ").append(commitId).append("\n"); // Agrega el identificador del commit
-        sb.append("Author: ").append(author).append("\n"); // Agrega el autor del commit
-        sb.append("Date: ").append(date.format(formatter)).append("\n"); // Agrega la fecha del commit formateada
-        sb.append("Description: ").append(description).append("\n"); // Agrega la descripción del commit
-        for (Change change : changes) {
-            sb.append(changeToString(change)).append("\n"); // Agrega la información de cada cambio
-        }
+        sb.append("commit ").append(commitId).append("\n");
+        sb.append("Author: ").append(author).append("\n");
+        sb.append("Date: ").append(date.format(formatter)).append("\n");
+        sb.append("Description: ").append(description).append("\n");
+        for (Change change : changes) { sb.append(changeToString(change)).append("\n"); }
         return sb.toString();
     }
 
-    // Método auxiliar: Devuelve una representación en cadena de un objeto Change.
-    // Incluye el tipo de cambio, la ruta del archivo y la diferencia en el número de líneas.
     private String changeToString(Change change) {
-        String lineChange = " (0)"; // Diferencia por defecto en el número de líneas
-        if (change instanceof AddChange) { // Si el cambio es de tipo AddChange
-            lineChange = " (+" + ((AddChange) change).getNumberOfLines() + ")"; // Agrega la diferencia positiva
-        } else if (change instanceof RemoveChange) { // Si el cambio es de tipo RemoveChange
-            lineChange = " (-" + ((RemoveChange) change).getNumberOfLines() + ")"; // Agrega la diferencia negativa
-        }
-        return change.getType() + " : " + change.getFilePath() + lineChange; // Devuelve la información del cambio formateada
+        String lineChange = " (0)";
+        if (change instanceof AddChange) { lineChange = " (+" + ((AddChange) change).getNumberOfLines() + ")"; }
+        else if (change instanceof RemoveChange) { lineChange = " (-" + ((RemoveChange) change).getNumberOfLines() + ")"; }
+        return change.getType() + " : " + change.getFilePath() + lineChange;
     }
 
-	/**
-	 * @return the defaultAuthor
-	 */
-	public static String getDefaultAuthor() {
-		return defaultAuthor;
-	}
-
-	/**
-	 * @param defaultAuthor the defaultAuthor to set
-	 */
-	public static void setDefaultAuthor(String defaultAuthor) {
-		ChangeCommit.defaultAuthor = defaultAuthor;
-	}
-
-	/**
-	 * @return the defaultDescription
-	 */
-	public static String getDefaultDescription() {
-		return defaultDescription;
-	}
-
-	/**
-	 * @param defaultDescription the defaultDescription to set
-	 */
-	public static void setDefaultDescription(String defaultDescription) {
-		ChangeCommit.defaultDescription = defaultDescription;
-	}
+    public static String getDefaultAuthor() { return defaultAuthor; }
+    public static void setDefaultAuthor(String defaultAuthor) { ChangeCommit.defaultAuthor = defaultAuthor; }
+    public static String getDefaultDescription() { return defaultDescription; }
+    public static void setDefaultDescription(String defaultDescription) { ChangeCommit.defaultDescription = defaultDescription; }
 }

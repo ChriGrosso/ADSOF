@@ -1,40 +1,47 @@
 package tester;
 
 import java.util.List;
-import commit.ChangeCommit;
 import branches.Branch;
-import code.AddChange;
-import code.Change;
-import code.ModifyChange;
-import code.RemoveChange;
+import commit.ChangeCommit;
+import change.AddChange;
+import change.Change;
+import change.ModifyChange;
+import change.RemoveChange;
 
+/**
+ * Clase BranchTester.
+ * Clase de prueba para la funcionalidad de la clase Branch.
+ *
+ * @author Christian Grosso, Marco Paparella
+ * @version 1.0
+ */
 public class BranchTester {
     public static void main(String[] args) {
-        Branch mainBranch = new Branch("main"); // Crea una nueva rama llamada "main"
+        Branch mainBranch = new Branch("main");
 
-        List<Change> changes1 = List.of( // Crea una lista de cambios para el primer commit
+        List<Change> changes1 = List.of(
                 new AddChange(0, "/src/main/NuevaClase.java", "line1\nline2"),
                 new ModifyChange(10, 10, "/src/main/ClaseExistente.java", "modified line"),
                 new RemoveChange(1, 2, "/src/main/ClaseObsoleta.java")
         );
-        ChangeCommit commit1 = new ChangeCommit("Author", "no comment", changes1); // Crea un nuevo commit con los cambios
+        ChangeCommit commit1 = new ChangeCommit("Author", "no comment", changes1);
 
-        List<Change> changes2 = List.of( // Crea una lista de cambios para el segundo commit
+        List<Change> changes2 = List.of(
                 new AddChange(0, "/src/pkg1/Decorator.java", "line1\nline2\nline3"),
                 new AddChange(0, "/src/pkg1/Decorator.java", "lastLine"),
                 new ModifyChange(10, 10, "/src/pkg1/Decorator.java", "modified line")
         );
-        ChangeCommit commit2 = new ChangeCommit("John Doe", "Decorator interface", changes2); // Crea un nuevo commit con los cambios
+        ChangeCommit commit2 = new ChangeCommit("John Doe", "Decorator interface", changes2);
 
-        commit.MergeCommit commit3 = new commit.MergeCommit("Author", "Merging previous commits", List.of(commit1, commit2)); // Crea un MergeCommit que combina los dos commits anteriores
+        commit.MergeCommit commit3 = new commit.MergeCommit("Author", "Merging previous commits", List.of(commit1, commit2));
 
-        mainBranch.addCommit(commit1); // Agrega el primer commit a la rama "main"
-        mainBranch.addCommit(commit2); // Agrega el segundo commit a la rama "main"
-        mainBranch.addCommit(commit3); // Agrega el MergeCommit a la rama "main"
+        mainBranch.addCommit(commit1);
+        mainBranch.addCommit(commit2);
+        mainBranch.addCommit(commit3);
 
-        Branch solvingIssueBranch = new Branch("Solving issue #1", mainBranch); // Crea una nueva rama llamada "Solving issue #1" a partir de la rama "main"
+        Branch solvingIssueBranch = new Branch("Solving issue #1", mainBranch);
 
-        System.out.println(mainBranch); // Imprime la rama "main"
-        System.out.println(solvingIssueBranch); // Imprime la rama "Solving issue #1"
+        System.out.println(mainBranch);
+        System.out.println(solvingIssueBranch);
     }
 }
