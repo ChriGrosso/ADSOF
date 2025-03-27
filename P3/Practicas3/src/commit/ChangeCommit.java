@@ -38,6 +38,7 @@ public class ChangeCommit {
 
     // Constructor: Crea un nuevo commit con el autor y la lista de cambios.
     // Utiliza la descripción por defecto.
+    
     public ChangeCommit(String author, List<Change> changes){
         this(author, getDefaultDescription(), changes);
     }
