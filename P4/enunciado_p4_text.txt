@@ -1,0 +1,263 @@
+Andlisis y Diserio de Software
+Curso 2024-2025
+
+Practica 4: Herencia, Interfaces y Excepciones
+
+Inicio: A partir del 17 de Marzo.
+
+Duraci6n: 3 semanas.
+
+Entrega: En Moodle, una hora antes del comienzo de la siguiente practica segtin grupos (semana del 7 de Abril)
+Peso de la practica: 30%
+
+El objetivo de la practica es aprender técnicas de orientacién a objetos mas avanzadas que en las practicas anteriores. En concreto, se hara
+énfasis en los siguientes conceptos:
+
+e = herencia
+
+e interfaces
+
+@ excepciones
+
+e colecciones
+
+Para ello, disefiaremos e implementaremos una aplicacion de participacion ciudadana, donde los ciudadanos, asociaciones ciudadanas y
+fundaciones pueden proponer proyectos para que el ayuntamiento los Ileve a cabo, asi como apoyar proyectos existentes, y recibir
+
+notificaciones respecto a los distintos eventos, de acuerdo a distintas estrategias de distribucién de mensajes.
+
+Apartado 1. Proponentes de proyectos (2.75 puntos)
+
+Comenzaremos creando clases para representar a los ciudadanos, asociaciones y fundaciones, y registrarlos en el sistema.
+
+Los ciudadanos tienen un nombre, un NIF y una contrasefia, que deben proporcionar al registrarse en el sistema. El formato de los NIFs
+debe tener 8 digitos seguidos de una letra (p. ej. 12345678A).
+
+Las asociaciones agrupan un conjunto de ciudadanos con un interés comun, asi como otras asociaciones (que a su vez podran agrupar
+otros ciudadanos y asociaciones, de manera recursiva). Ademas, cada asociacion tiene un nombre, una contrasefia, y un ciudadano
+registrado que la representa. Estos datos se deben especificar al registrar la asociacion en el sistema. Un ciudadano debe poder inscribirse
+a cualquier asociaci6n registrada, asi como darse de baja de las asociaciones a las que pertenece (de una en una, o de todas las que
+pertenece). Un ciudadano puede pertenecer a varias asociaciones, pero una asociacién no puede tener inscrito dos veces al mismo
+ciudadano (esto es, con el mismo NIF) ni directa ni indirectamente en las asociaciones que contiene. Por ejemplo, si la asociacién
+“conservemos el manzanares” contiene la asociacién “amigos de los pdjaros’”, un ciudadano podria formar parte de una de ellas, pero no
+de ambas. Si una asociacion agrupa otras asociaciones, todas deben tener el mismo representante. Por simplicidad, no se podra afiadir una
+asociaciOn a otra, a no ser que la primera esté vacia.
+
+Por ultimo, las fundaciones tienen un nombre, un CIF y una contrasefia, que deben proporcionar al registrarse en el sistema. El formato
+de los CIFs debe tener una letra, seguida de 7 digitos, seguida de una letra.
+
+El sistema debe controlar que no hay NIFs ni CIFs repetidos en el sistema, que su formato es correcto, que la inscripcién de ciudadanos
+en asociaciones cumple las condiciones mencionadas previamente, y que si una asociacion agrupa a otras todas deben tener el mismo
+representante. De no ser asi, se deberan lanzar excepciones que permitan identificar el tipo de error producido, contengan informaci6n de
+los detalles del error, y permitan su consulta. Debes disefiar una API adecuada para el sistema, que permita, por ejemplo, recuperar un
+usuario a partir de su nombre, u obtener todos los usuarios registrados.
+
+Se pide: Usando principios de orientacién a objetos, crea todo el cédigo necesario para el registro de ciudadanos, asociaciones y
+fundaciones, y la inscripcion y baja de ciudadanos en asociaciones. Crea testers que prueben la funcionalidad que has implementado.
+Como ejemplo, la siguiente salida resulta de imprimir la lista de usuarios registrados en un sistema con 3 ciudadanos, 2 asociaciones y 1
+fundacion. La asociacién “conservemos el manzanares” contiene la asociacién “amigos de los pdjaros’”’, Juan pertenece a “conservemos
+el manzanares”, y Ana y Luisa a “amigos de los pdjaros”. Nétese que en la salida se han introducido saltos de linea por claridad.
+
+[Juan Bravo NIF (@1234567K) <usuario>,
+
+Ana Lopez NIF (@1234567L) <usuario>,
+
+Luisa Gomez NIF (@1234567G) <usuario>,
+
+conservemos el manzanares <asociaci6n con 3 ciudadanos>,
+amigos de los pajaros <asociacidn con 2 ciudadanos>,
+Fundacion Canal CIF (A1234567B) <fundaci6n>]
+
+
+
+================================================================================
+
+Apartado 2. Proyectos participativos (1 puntos)
+
+Los ciudadanos, asociaciones y fundaciones podran proponer proyectos participativos. Un proyecto tiene un titulo, una descripcion y un
+proponente (ciudadano, asociacién o fundacién). Ademas, en el caso de proyectos propuestos por una fundacién, deberan indicar un
+presupuesto estimado, y el porcentaje del presupuesto que asumira la fundacién. Al crear un nuevo proyecto, el sistema le asignara
+automaticamente un cédigo identificativo unico, y guardara la fecha y hora en que se propuso.
+
+Se debe controlar que el presupuesto estimado sea mayor que cero, y que el porcentaje sea un numero entre 1 y 100, lanzandose
+excepciones en caso contrario. Debes disefiar una API adecuada para el sistema, con métodos que permitan, por ejemplo, recuperar todos
+los proyectos registrados, o recuperar un proyecto dado su nombre o su codigo identificativo.
+
+Se pide: Usando principios de orientacién a objetos, crea el codigo necesario para permitir la propuesta de proyectos por ciudadanos,
+asociaciones y fundaciones. Crea festers que prueben la funcionalidad que has implementado. A modo de ejemplo, la siguiente salida es
+el resultado de imprimir la lista de proyectos que devuelve el ejemplo de sistema del apartado 1. En el sistema se han registrado dos
+proyectos, uno propuesto por una asociacion, y otro por una fundacion. Noétese que en la salida impresa se han introducido saltos de linea
+por claridad.
+
+[@: Limpieza del manzanares. Proponente: conservemos el manzanares <asociacidn con 3 ciudadanos>,
+1: Gastemos menos agua. Proponente: Fundaci6n Canal CIF (A1234567B) <fundacién>. Presupuesto: 1000000.0€.
+Porcentaje: 80.0% /proyecto de fundacion/]
+
+Apartado 3. Apoyo a proyectos (2.5 puntos)
+
+Los ciudadanos y asociaciones registradas podran apoyar los proyectos participativos propuestos en el sistema. No obstante, si intentan
+apoyar un proyecto propuesto por ellos, que han apoyado previamente, 0 que se propuso hace mas de 60 dias, el sistema lanzara una
+excepcion y el apoyo sera invalido. Si una asociacién apoya un proyecto, posteriormente ningun ciudadano inscrito en esa asociaci6n (ni
+en las asociaciones que contiene, o que la contienen) podra apoyar ese proyecto (se considera que el ciudadano ya lo esta apoyando con
+su pertenencia a la asociacion). Para evitar inconsistencias, cuando una asociacion A apoye un proyecto P, el sistema eliminara todos los
+apoyos a P que provengan de ciudadanos y asociaciones pertenecientes (directa o indirectamente) a A, manteniendo unicamente el apoyo
+de A al proyecto. Se entiende que, si una asociacién o ciudadano propone un proyecto, automaticamente lo apoya.
+
+Disefia una API adecuada para poder consultar los apoyos a proyectos. Por ejemplo, el sistema debera incluir un método para obtener un
+mapa de pares de proyectos y su numero de apoyos, ordenados de mayor a menor ntiimero de apoyos, y en caso de tener igual numero de
+apoyos, apareceran en primer lugar los apoyados mas recientemente. E] apoyo de un ciudadano a un proyecto suma | al n° total de apoyos
+al proyecto. El apoyo de una asociacién suma tantas unidades como ciudadanos pertenezcan a la asociacion, directa o indirectamente. Se
+debe tener en cuenta que, si un ciudadano se da de baja de una asociacién, se elimina su voto de todos los apoyos realizados por la
+asociacion hasta ese momento. Igualmente, si un ciudadano se da de alta en una asociacion, se suma su voto a todos los proyectos apoyados
+por la asociacion hasta ese momento. Crea también un método para obtener un mapa con los proyectos y la coleccién de ciudadanos que
+los apoyan.
+
+Se pide: Usando principios de orientacién a objetos, crea el cddigo necesario para que ciudadanos y asociaciones puedan apoyar los
+proyectos registrados, y consultar los apoyos. Crea festers que prueben la funcionalidad implementada, creando y apoyando varios
+proyectos, e imprimiendo por pantalla el mapa ordenado de proyectos con el numero de apoyos recibidos, y la lista de ciudadanos que los
+apoyan. A modo de ejemplo, la siguiente salida muestra el resultado de imprimir el mapa con los apoyos por proyecto (donde Juan apoya
+el proyecto “Gastemos menos agua’, y el proyecto “Limpieza del manzanares’” viene apoyado por los ciudadanos miembros de la
+asociaciOn proponente):
+
+{@: Limpieza del manzanares. Proponente: conservemos el manzanares <asociaci6n con 3 ciudadanos>=3,
+1: Gastemos menos agua. Proponente: Fundacién Canal CIF (A1234567B) <fundacién>. Presupuesto: 100@000.0€.
+Porcentaje: 80.0% /proyecto de fundacion/=1}
+
+De manera similar, el resultado de imprimir el mapa con los ciudadanos que apoyan cada proyecto es:
+
+{@: Limpieza del manzanares. Proponente: conservemos el manzanares <asociacién con 3 ciudadanos>=[Juan Bravo
+NIF (@1234567K) <usuario>, Ana Lopez NIF (@1234567L) <usuario>, Luisa Gémez NIF (@1234567G) <usuario>],
+
+1: Gastemos menos agua. Proponente: Fundaci6n Canal CIF (A1234567B) <fundacion>. Presupuesto: 1000000.0€.
+Porcentaje: 80.0% /proyecto de fundacion/=[Juan Bravo NIF (@1234567K) <usuario>]}
+
+
+
+================================================================================
+
+Apartado 4. Seguidores (2.25 puntos)
+
+Los ciudadanos y las asociaciones pueden seguir a proyectos, asociaciones y fundaciones. Los seguidores (ciudadanos y asociaciones)
+recibiran anuncios de interés relacionados con las entidades (proyectos, asociaciones y fundaciones) a las que siguen. Por defecto, todos
+los ciudadanos miembros de una asociacion la siguen. Si un ciudadano sigue a una asociacion, recibira anuncios tanto de las entidades
+que él sigue, como de las entidades a las que sigue la asociacién, sin repeticiones. Para que la aplicacién pueda extenderse facilmente con
+nuevos tipos de seguidores (p. ej. personal del ayuntamiento, una newsletter), los seguidores deben implementar la interfaz Follower
+que se muestra a continuacion. El método receive se encargara de recibir y procesar anuncios: si es un ciudadano, almacenara el anuncio
+en su lista de mensajes en orden de recepci6n, y si es una asociaci6n, lo redistribuira a sus miembros (ciudadanos y asociaciones).
+
+public interface Follower {
+// puedes modificar esta interfaz si lo crees conveniente,
+// pero debe incluir al menos el siguiente método:
+public void receive(Announcement t);
+
+También se quiere poder afiadir facilmente al sistema nuevas entidades a las que seguir. Para ello, cualquier entidad a seguir debe
+implementar la interfaz FollowedEntity que se muestra a continuacién. Los métodos follow y unfollow permiten que un seguidor
+siga o deje de seguir a una entidad, respectivamente. El] método announce se encargara de emitir los anuncios (objetos de tipo
+Announcement) a todos los seguidores. En el caso de proyectos, anunciara cada nuevo apoyo que reciba (informando del numero total
+de apoyos obtenidos hasta la fecha). En el caso de fundaciones, anunciara cada proyecto que proponga (indicando su titulo y descripcion).
+En el caso de asociaciones, anunciara cada proyecto que proponga (incluyendo su titulo y descripcién), cada proyecto que apoya
+(indicando su titulo y descripcién), y cada nueva inscripcion (indicando el numero total de miembros inscritos).
+
+public interface FollowedEntity {
+// puedes modificar esta interfaz si lo crees conveniente,
+// pero debe incluir al menos los siguientes métodos:
+
+public boolean follow(Follower f);
+public boolean unfollow(Follower f);
+public void announce(Announcement t);
+
+Se pide: Usando principios de orientacién a objetos, crea el cddigo necesario para que ciudadanos y asociaciones puedan seguir a
+proyectos, asociaciones y fundaciones. Crea testers que prueben la funcionalidad que has implementado, mostrando como los ciudadanos
+y las asociaciones pueden seguir a una entidad, y como se le anuncian los nuevos apoyos, proyectos e inscripciones. A modo de ejemplo,
+se muestra un posible resultado de imprimir los anuncios para los 3 ciudadanos usados en los ejemplos anteriores, donde Juan ha seguido
+a la Fundacion Canal antes de que ésta cree el proyecto. En la salida se han afiadido algunos saltos de linea por claridad:
+
+Anuncios para Juan Bravo:
+
+[ Alta de Juan Bravo en conservemos el manzanares (1 miembros),
+
+conservemos el manzanares propone el proyecto Limpieza del manzanares: “Limpiar el manzanares para recuperar
+su flora y fauna",
+
+conservemos el manzanares da apoyo al proyecto Limpieza del manzanares (3 apoyos),
+
+Fundacion Canal propone el proyecto Gastemos menos agua: “Mejora de las infraestructuras de distribucidén y
+captacion de agua" ]
+
+Anuncios para Ana Lopez:
+
+[Alta de Ana Lépez en amigos de los pajaros (1 miembros),
+
+Alta de Luisa Gdmez en amigos de los pajaros (2 miembros),
+
+conservemos el manzanares propone el proyecto Limpieza del manzanares: “Limpiar el manzanares para recuperar
+su flora y fauna",
+
+conservemos el manzanares da apoyo al proyecto Limpieza del manzanares (3 apoyos)]
+
+Anuncios para Luisa Gomez:
+
+[Alta de Luisa Gémez en amigos de los pdjaros (2 miembros),
+
+conservemos el manzanares propone el proyecto Limpieza del manzanares: “Limpiar el manzanares para recuperar
+su flora y fauna”,
+
+conservemos el manzanares da apoyo al proyecto Limpieza del manzanares (3 apoyos)]
+
+
+
+================================================================================
+
+Apartado 5. Estrategias de distribucién de anuncios (1.5 puntos)
+
+Extiende la interfaz FollowedEntity para permitir el uso de estrategias de distribucion de anuncios (objetos de tipo
+AnnouncementStrategy) cuando un Follower sigue a una FollowedEntity. Por ejemplo, la interfaz extendida podria contener el
+siguiente método:
+
+public boolean follow(Follower £, AnnouncementStrategy ns);
+
+Esta nueva variante del método follow recibe un objeto de tipo AnnouncementStrategy. Si no se usa, al seguidor se le anunciara
+cada nuevo apoyo, proyecto e inscripcion de la entidad seguida, tal y como se explica en el apartado 4. Por el contrario, si se utiliza, debes
+realizar un disefio que permita aplicar otras estrategias para el envio de anuncios a un seguidor. Se consideraran dos estrategias: (i) enviar
+al seguidor uno de cada n anuncios, con 7 configurable para cada seguidor (p. ej. enviarle uno de cada 10); (ii) si se sigue a un proyecto,
+enviar al seguidor un Unico anuncio cuando supere n apoyos, con n configurable para cada seguidor.
+
+Se pide: Usando principios de orientacién a objetos, crea el cddigo necesario para permitir estrategias de distribucion de anuncios. Crea
+testers que prueben la funcionalidad que has implementado, mostrando como actuan las dos estrategias descritas. A modo de ejemplo, se
+muestra un posible resultado de imprimir los anuncios para Juan Bravo, con una estrategia que muestra uno de cada dos anuncios de las
+fundaciones que sigue y las asociaciones en las que esta inscrito:
+
+[Alta de Juan Bravo en conservemos el manzanares (1 miembros),
+
+conservemos el manzanares da apoyo al proyecto Limpieza del manzanares (3 apoyos),
+
+Fundacion Canal propone el proyecto Gastemos menos agua: "Mejora de las infraestructuras de distribucion y
+captacion de agua" ]
+
+Comentarios adicionales
+
+e No olvides que, ademas del correcto funcionamiento de la practica, un aspecto fundamental en la evaluacion sera la calidad del
+disefio. Tu disefio debe utilizar los principios de orientacion a objetos, ademas de ser claro, facil de entender, extensible y flexible.
+Presta atencion a la calidad del cdigo, evitando redundancias.
+
+e Organiza el codigo en paquetes.
+
+e Crea programas de prueba para ejercitar el codigo de cada apartado, y entrégalos con tu cddigo.
+
+Normas de entrega
+
+e Se debe entregar el eédigo Java de los apartados, la documentacién generada con javadoc, los programas de prueba creados, y
+un diagrama de disefio de toda la practica (en PDF) junto con una breve explicacion.
+
+e El nombre de los alumnos debe ir en la cabecera javadoc de todas las clases entregadas.
+
+La entrega la realizara uno de los alumnos de la pareja a través de Moodle.
+
+e Se debe entregar un unico fichero ZIP / RAR con todo lo solicitado, que debe Ilamarse de la siguiente manera:
+GR<numero_grupo>_<nombre_estudiantes>.zip. Por ejemplo, Marisa y Pedro, del grupo 2261, entregarian el fichero:
+GR2261 MarisaPedro.zip.
+
+
+
+================================================================================
+
