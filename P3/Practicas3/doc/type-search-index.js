@@ -1,1 +1,0 @@
-typeSearchIndex = [{"p":"change","l":"AddChange"},{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"branches","l":"Branch"},{"p":"change","l":"Change"},{"p":"commit","l":"ChangeCommit"},{"p":"commit","l":"MergeCommit"},{"p":"change","l":"ModifyChange"},{"p":"change","l":"RemoveChange"},{"p":"repository","l":"Repository"}];updateSearchResults();
