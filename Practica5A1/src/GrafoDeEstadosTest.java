@@ -60,8 +60,8 @@ class GrafoDeEstadosTest {
 
         assertTrue(output.contains("Iniciando flujo de trabajo: Test Debug"));
         assertTrue(output.contains("Estado inicial: 0"));
-        assertTrue(output.contains("Step 1 (incrementar) - Ejecutando nodo con estado: 0"));
-        assertTrue(output.contains("Step 1 (incrementar) - Estado después de la ejecución: 1"));
+        assertTrue(output.contains("Paso 1 (incrementar) - Ejecutando nodo con estado: 0"));
+        assertTrue(output.contains("Paso 1 (incrementar) - Estado después de la ejecución: 1"));
         assertTrue(output.contains("Alcanzado nodo final: incrementar"));
         assertTrue(output.contains("Ejecución del flujo de trabajo finalizada."));
     }
